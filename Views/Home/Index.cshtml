@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Accueil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var userName = User.Identity?.Name ?? "";
+    
+    // Extraction du prénom
+    var firstName = "";
+    if (!string.IsNullOrEmpty(userName))
+    {
+        var emailParts = userName.Split('@');
+        if (emailParts.Length > 0)
+        {
+            var namePart = emailParts[0];
+            if (namePart.Contains('.'))
+            {
+                firstName = namePart.Split('.')[0];
+            }
+            else
+            {
+                firstName = namePart;
+            }
+            if (firstName.Length > 0)
+            {
+                firstName = char.ToUpper(firstName[0]) + firstName.Substring(1).ToLower();
+            }
+        }
+    }
+}
+
+<!-- Hero Section -->
+<section class="hero-section-modern">
+    <div class="container">
+        <div class="hero-wrapper">
+            <div class="hero-text p-0">
+                @if (isAuthenticated)
+                {
+                    <h1 class="hero-title">
+                        Bonjour, <br/>
+                        <span style="color: #64b5f6;">@firstName</span> 👋
+                    </h1>
+                    <p class="hero-subtitle">
+                        Bienvenue sur votre espace RH collaboratif. 
+                        Gérez vos congés, télétravail et documents en quelques clics.
+                    </p>
+                    <div class="d-flex gap-3 hero-buttons-container">
+                        <a asp-controller="Leave" asp-action="Index" class="btn btn-hero btn-hero-primary mr-3">
+                            <i class="fas fa-calendar-check mr-2"></i> Mes congés
+                        </a>
+                        <a asp-controller="Telework" asp-action="Index" class="btn btn-hero btn-hero-outline">
+                            <i class="fas fa-laptop mr-2"></i> Télétravail
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <h1 class="hero-title">
+                        Simplifiez votre <br/>
+                        <span style="color: #64b5f6;">Gestion RH</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Une plateforme moderne pour centraliser vos processus RH.
+                        Collaboration, transparence et efficacité pour toute l'entreprise.
+                    </p>
+                    <div class="d-flex gap-3 hero-buttons-container">
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-hero btn-hero-primary mr-3">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Se connecter
+                        </a>
+                        <a href="#features" class="btn btn-hero btn-hero-outline">
+                            En savoir plus
+                        </a>
+                    </div>
+                }
+            </div>
+            
+            <div class="hero-visual">
+                <img src="~/img/collabrh-logo.svg" alt="CollabRH Logo" class="img-fluid hero-logo-animation" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+            <p class="section-description">Une suite complète d'outils pour faciliter votre quotidien professionnel.</p>
+        </div>
+
+        <div class="row">
+            <!-- Gestion des congés -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-wrapper bg-soft-primary">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="feature-title-modern">Gestion des congés</h3>
+                    <p class="feature-text-modern">
+                        Posez vos congés en quelques secondes et suivez l'état de validation en temps réel.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Télétravail -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-wrapper bg-soft-success">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3 class="feature-title-modern">Télétravail</h3>
+                    <p class="feature-text-modern">
+                        Déclarez vos jours de télétravail et gardez une visibilité sur la présence de l'équipe.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-wrapper bg-soft-info">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3 class="feature-title-modern">Documents RH</h3>
+                    <p class="feature-text-modern">
+                        Accédez à vos bulletins de paie et documents administratifs en toute sécurité.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Suivi (Manager/RH) -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-wrapper bg-soft-warning">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title-modern">Suivi & Validation</h3>
+                    <p class="feature-text-modern">
+                        Pour les managers, un tableau de bord intuitif pour valider les demandes de l'équipe.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

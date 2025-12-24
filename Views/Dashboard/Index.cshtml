@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "Tableau de bord RH";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold" style="color: #0056b3;"><i class="fas fa-chart-line"></i> Tableau de bord RH</h2>
+        <p class="text-muted">Visualisez les statistiques des congés et du télétravail par période et par équipe.</p>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Administration des Soldes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="card-title">Réinitialisation Annuelle</h6>
+                            <p class="card-text text-muted small">Cett action remettra le solde de congés de <strong>tous les employés</strong> à 25 jours. À utiliser uniquement le 1er Janvier ou lors de l'initialisation du système.</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                             <form asp-controller="Dashboard" asp-action="ResetBalances" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir réinitialiser le solde de TOUS les employés à 25 jours ? Cette action est irréversible.');">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-sync-alt me-2"></i> Réinitialiser Tout (25 jours)
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Congés pris par jour -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">📅 Congés pris par jour</h5>
+                <canvas id="chartCongeJour"></canvas>
+            </div>
+        </div>
+
+        <!-- Congés pris par mois -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">📆 Congés pris par mois</h5>
+                <canvas id="chartCongeMois"></canvas>
+            </div>
+        </div>
+
+        <!-- Télétravail par jour -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">🏠 Télétravail par jour</h5>
+                <canvas id="chartTeletravailJour"></canvas>
+            </div>
+        </div>
+
+        <!-- Télétravail par mois -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">🗓️ Télétravail par mois</h5>
+                <canvas id="chartTeletravailMois"></canvas>
+            </div>
+        </div>
+
+        <!-- Congés par équipe -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">👥 Congés par équipe</h5>
+                <canvas id="chartCongeEquipe"></canvas>
+            </div>
+        </div>
+
+        <!-- Télétravail par équipe -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">👩‍💻 Télétravail par équipe</h5>
+                <canvas id="chartTeletravailEquipe"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Exemple de données fictives (tu pourras ensuite les remplacer par des vraies données C#)
+        const jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+        const mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+        const equipes = ['RH', 'IT', 'Finance', 'Marketing'];
+
+        // Fonction générique pour créer un graphique
+        function createChart(ctx, label, labels, data, color) {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: color,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Création des graphiques
+        createChart(document.getElementById('chartCongeJour'), 'Congés par jour', jours, [2, 1, 0, 3, 2, 0, 0], '#36A2EB');
+        createChart(document.getElementById('chartCongeMois'), 'Congés par mois', mois, [5, 8, 4, 9, 6, 7, 3, 5, 2, 4, 8, 6], '#4BC0C0');
+        createChart(document.getElementById('chartTeletravailJour'), 'Télétravail par jour', jours, [1, 2, 3, 2, 1, 0, 0], '#9966FF');
+        createChart(document.getElementById('chartTeletravailMois'), 'Télétravail par mois', mois, [4, 6, 7, 5, 9, 4, 8, 3, 5, 6, 7, 4], '#FF9F40');
+        createChart(document.getElementById('chartCongeEquipe'), 'Congés par équipe', equipes, [10, 15, 8, 12], '#FF6384');
+        createChart(document.getElementById('chartTeletravailEquipe'), 'Télétravail par équipe', equipes, [12, 9, 14, 10], '#36A2EB');
+    </script>
+}
