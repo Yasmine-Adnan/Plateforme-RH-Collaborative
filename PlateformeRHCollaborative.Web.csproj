@@ -30,4 +30,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
   </ItemGroup>
 
+  <!-- Le projet de tests est dans un sous-dossier : on l'exclut de la compilation de l'app -->
+  <ItemGroup>
+    <Compile Remove="PlateformeRHCollaborative.Tests\**" />
+    <Content Remove="PlateformeRHCollaborative.Tests\**" />
+    <EmbeddedResource Remove="PlateformeRHCollaborative.Tests\**" />
+    <None Remove="PlateformeRHCollaborative.Tests\**" />
+  </ItemGroup>
+
 </Project>
