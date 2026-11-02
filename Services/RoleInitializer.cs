@@ -44,7 +44,10 @@ public class RoleInitializer : IHostedService
 
             // Seed Admin User
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var adminEmail = "admin@gmail.com";
+            var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+            var adminEmail = config["Admin:Email"] ?? "admin@gmail.com";
+            var adminPassword = config["Admin:Password"]
+                ?? throw new InvalidOperationException("Admin:Password n'est pas configuré (user-secrets ou variable d'environnement Admin__Password).");
             
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
@@ -56,7 +59,7 @@ public class RoleInitializer : IHostedService
                     EmailConfirmed = true
                 };
                 
-                var result = await userManager.CreateAsync(adminUser, "Yasmine123*");
+                var result = await userManager.CreateAsync(adminUser, adminPassword);
                 
                 if (result.Succeeded)
                 {
