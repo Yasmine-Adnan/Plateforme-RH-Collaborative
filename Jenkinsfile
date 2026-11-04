@@ -28,6 +28,7 @@ pipeline {
             agent {
                 docker {
                     image 'mcr.microsoft.com/dotnet/sdk:9.0'
+                    args '-v nuget-cache:/root/.nuget/packages'
                     reuseNode true
                 }
             }
@@ -40,6 +41,7 @@ pipeline {
             agent {
                 docker {
                     image 'mcr.microsoft.com/dotnet/sdk:9.0'
+                    args '-v nuget-cache:/root/.nuget/packages'
                     reuseNode true
                 }
             }
@@ -60,6 +62,10 @@ pipeline {
         }
 
         stage('Push Docker Hub') {
+            options {
+                retry(3)
+                timeout(time: 40, unit: 'MINUTES')
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub',
                                                   usernameVariable: 'DH_USER',
