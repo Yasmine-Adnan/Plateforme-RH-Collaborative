@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();    
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -77,5 +78,7 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.MapHub<NotificationsHub>("/hubs/notifications");
+
+app.MapHealthChecks("/health");
 
 app.Run();

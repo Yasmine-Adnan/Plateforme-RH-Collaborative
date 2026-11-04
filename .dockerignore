@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/out/
+**/node_modules/
+PlateformeRHCollaborative.Tests/
+.git/
+.vs/
+.vscode/
+*.user
+.env
