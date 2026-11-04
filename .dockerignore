@@ -8,3 +8,5 @@ PlateformeRHCollaborative.Tests/
 .vscode/
 *.user
 .env
+ci/
+Jenkinsfile
